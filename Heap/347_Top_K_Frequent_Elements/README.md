@@ -28,7 +28,7 @@ You may return the answer in any order.
 
 ## 💻 C++ Code (Min Heap)
 
-⏱ Time Complexity (Min Heap)
+#⏱ Time Complexity (Min Heap)
 
 Building frequency map → O(n)
 
@@ -37,10 +37,9 @@ Heap operations → O(n log k)
 Extracting k elements → O(k log k)
 
 👉 Final Time Complexity:
-
 O(n log k)
 
-Space Complexity (Min Heap)
+#Space Complexity (Min Heap)
 
 Frequency map → O(n)
 
@@ -49,26 +48,17 @@ Heap (size k) → O(k)
 Output → O(k)
 
 👉 Final Space Complexity:
-
 O(n)
 
 
-🚀 Approach 2: Bucket Sort (Optimized)
+##🚀 Approach 2: Bucket Sort (Optimized)
 💡 Idea
 
 Maximum possible frequency = n.
-
 Create buckets where index = frequency.
-
 Store numbers in bucket corresponding to their frequency.
-
 Traverse buckets from high to low until k elements collected.
-
 No heap required.
-
-
-
-
 
 class Solution {
 public:
