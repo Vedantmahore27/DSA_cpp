@@ -18,3 +18,25 @@ public:
          return ans;
     }
 };
+
+class Solution {
+public:
+     vector<string> ans;
+    void solve(int n, string curr,int last){
+        if(curr.length()==n){
+            ans.push_back(curr);
+            return;
+        }
+          
+        
+        solve(n,curr+"1",1);
+
+       if(last==1 || curr.empty())solve(n,curr+"0",0);
+
+       }
+    vector<string> validStrings(int n) {
+        string curr="";
+        solve(n,curr,0);
+        return ans;
+    }
+};
