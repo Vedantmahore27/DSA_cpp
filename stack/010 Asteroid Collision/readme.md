@@ -1,106 +1,140 @@
-🚀 Asteroid Collision – Complete Guide (Stack)
-📌 Problem Summary
+# 🚀 Asteroid Collision (Stack)
 
-You are given an array asteroids where:
+## 📌 Problem
 
-Positive → moving right ➡️
+You are given an integer array `asteroids`.
 
-Negative → moving left ⬅️
+- Positive value → moving right ➡️  
+- Negative value → moving left ⬅️  
 
-💥 Collision Rules:
+### 💥 Collision Rules:
+- Collision occurs only when a right-moving asteroid meets a left-moving asteroid
+- Smaller asteroid explodes
+- If both are equal → both explode
+- Remaining asteroids continue moving
 
-Only happens when:
+---
 
-right-moving asteroid meets left-moving asteroid
+## 🧾 Examples
 
-Smaller one explodes
+### Example 1
+Input:
+[5, 10, -5]
 
-If equal → both explode
+Output:
+[5, 10]
 
-Survivors continue moving
-
-🧾 Example
-Example 1:
-Input: [5, 10, -5]
-Output: [5, 10]
-
-👉 Explanation:
-
+Explanation:
 10 and -5 collide → 10 survives
 
-Example 2:
-Input: [8, -8]
-Output: []
+---
 
-👉 Explanation:
+### Example 2
+Input:
+[8, -8]
 
-Equal magnitude → both destroyed 💥
+Output:
+[]
 
-Example 3:
-Input: [10, 2, -5]
-Output: [10]
+Explanation:
+Equal size → both destroyed
 
-👉 Explanation:
+---
 
-2 vs -5 → 2 destroyed
+### Example 3
+Input:
+[10, 2, -5]
 
-10 vs -5 → 10 survives
+Output:
+[10]
 
-🧠 Intuition (MOST IMPORTANT 🔥)
-🔑 Who will collide?
+Explanation:
+2 vs -5 → 2 destroyed  
+10 vs -5 → 10 survives  
 
-👉 Only when:
+---
 
-previous > 0  AND  current < 0
+## 🧠 Intuition
 
-Why?
+### 🔑 Who Collides?
 
-Right ➡️ meets left ⬅️ → collision
+Collision happens only when:
 
-Same direction → never meet
+previous > 0 AND current < 0
 
-💡 How Stack Came Into Mind?
+Reason:
+- Right-moving meets left-moving → collision
+- Same direction → no collision
 
-Think like this:
+---
 
-“I need to compare current asteroid with previous ones… but only the latest active one matters”
+## 💡 Why Stack?
 
-That’s exactly what a stack does 👇
+We need to:
+- Compare current asteroid with **previous surviving ones**
+- Only the **latest active asteroid matters**
 
-Stores alive asteroids
+👉 Stack gives:
+- Last-in access (top)
+- Efficient collision handling
 
-Gives quick access to last one (top)
+---
 
-🧠 Mental Model
+## 🧠 Mental Model
 
-Stack = “survivors so far”
-
-For each asteroid:
-
-Check collision with stack top
-
-Resolve until stable
-
-Push if survives
-
-⚙️ Approach
-Step-by-step:
-
-Traverse array
+Stack = "alive asteroids so far"
 
 For each asteroid:
+1. Check collision with stack top
+2. Resolve until stable
+3. Push if it survives
 
-While collision possible:
+---
 
-Compare sizes
+## ⚙️ Approach
 
-Pop smaller one
+1. Traverse array
+2. For each asteroid:
+   - While collision possible:
+     - If stack top < current → pop
+     - If equal → pop and stop
+     - If stack top > current → current destroyed
+3. If current survives → push to stack
+4. Return stack
 
-Decide if current survives
+---
 
-Push if not destroyed
+## 🧑‍💻 Code
 
-Return stack
+```cpp
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> st;
 
+        for (int x : asteroids) {
+            bool destroyed = false;
 
- 
+            while (!st.empty() && st.back() > 0 && x < 0) {
+                if (st.back() < abs(x)) {
+                    st.pop_back();
+                } 
+                else if (st.back() == abs(x)) {
+                    st.pop_back();
+                    destroyed = true;
+                    break;
+                } 
+                else {
+                    destroyed = true;
+                    break;
+                }
+            }
+
+            if (!destroyed) {
+                st.push_back(x);
+            }
+        }
+
+        return st;
+    }
+};
