@@ -35,18 +35,10 @@ Output: 2
 ---
 
 ### Example 2
-👉 Target not present → should be inserted at index **1**
-Input: nums = [1,3,5,6], target = 5
-Output: 2
----
-
-### Example 3
-👉 Target not present → should be inserted at index **1**
 Input: nums = [1,3,5,6], target = 7
+👉 Target not present → should be inserted at index **4**
 Output: 4
----
 
-👉 Insert at the **beginning**
 
 ---
 
