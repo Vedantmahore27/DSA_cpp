@@ -210,6 +210,6 @@ int search(vector<int>& nums, int target) {
         }
     }
     return -1;
-}t-1, target);
+ }
 }
 
