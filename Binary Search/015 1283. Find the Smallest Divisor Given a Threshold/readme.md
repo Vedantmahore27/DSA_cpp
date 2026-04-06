@@ -1,60 +1,132 @@
 # 🔍 Smallest Divisor Given a Threshold (LeetCode)
 
+---
+
 ## 🧩 Problem Statement
 
-Given an array `nums` and an integer `threshold`, we need to find the **smallest divisor** such that:
+Given an integer array `nums` and an integer `threshold`, find the **smallest divisor** such that:
 
 [
 \sum \lceil \frac{nums[i]}{divisor} \rceil \leq threshold
 ]
 
+Each result of division is rounded up to the nearest integer.
+
 ---
 
-## 💡 Intuition (Most Important)
+## 📊 Example
+
+```
+Input:
+nums = [1,2,5,9]
+threshold = 6
+
+Output:
+5
+```
+
+### 🔎 Explanation
+
+For divisor = 5:
+
+```
+ceil(1/5) = 1
+ceil(2/5) = 1
+ceil(5/5) = 1
+ceil(9/5) = 2
+
+Sum = 5 ≤ 6 ✅
+```
+
+Try smaller divisor (like 4):
+
+```
+ceil(1/4)=1
+ceil(2/4)=1
+ceil(5/4)=2
+ceil(9/4)=3
+
+Sum = 7 > 6 ❌
+```
+
+👉 So smallest valid divisor = **5**
+
+---
+
+## 📌 Constraints
+
+* `1 ≤ nums.length ≤ 5 * 10^4`
+* `1 ≤ nums[i] ≤ 10^6`
+* `nums.length ≤ threshold ≤ 10^6`
+
+---
+
+## 💡 Intuition
 
 * We need to **minimize the divisor**
-* For every divisor, we calculate:
-
-  ```
-  sum = ceil(nums[0]/divisor) + ceil(nums[1]/divisor) + ...
-  ```
-
----
+* For every divisor, we compute a sum
 
 ### 🔥 Key Observation
 
 * As **divisor increases → sum decreases**
 * This is **monotonic behavior**
 
-👉 So we can apply **Binary Search on Answer**
+👉 This hints towards **Binary Search on Answer**
 
 ---
 
-### 🎯 Search Space
+## 🐢 Brute Force Approach
 
-* Minimum divisor = `1`
-* Maximum divisor = `max(nums)`
+### Idea:
 
-👉 Why not more than max?
+* Try every divisor from `1` to `max(nums)`
+* Compute sum for each
 
-Because:
+### Time Complexity:
 
 ```
-If divisor ≥ max(nums),
-then every term becomes 1
+O(n * max(nums))
+```
+
+👉 Very slow (TLE for large inputs)
+
+---
+
+## ⚡ Better Approach (Binary Search on Answer)
+
+### Search Space:
+
+```
+1 → max(nums)
+```
+
+### Why max(nums)?
+
+If:
+
+```
+divisor ≥ max(nums)
+```
+
+Then:
+
+```
+ceil(num / divisor) = 1 for all elements
 ⇒ sum = n (constant)
 ```
 
-So after that, answer **does not change**
+👉 So beyond this point, answer doesn’t change
 
 ---
 
-## ⚙️ Approach
+## 🚀 Optimal Approach
 
-1. Apply Binary Search on range `[1, max(nums)]`
-2. For each `mid` (candidate divisor):
+### Steps:
 
-   * Calculate sum using:
+1. Apply Binary Search on `[1, max(nums)]`
+2. For each `mid`:
+
+   * Compute sum:
 
      ```
      ceil(num / mid)
@@ -62,10 +134,10 @@ So after that, answer **does not change**
 3. If sum ≤ threshold:
 
    * Store answer
-   * Try smaller divisor (`end = mid - 1`)
+   * Try smaller divisor
 4. Else:
 
-   * Increase divisor (`start = mid + 1`)
+   * Increase divisor
 
 ---
 
@@ -83,11 +155,11 @@ Use:
 (num + mid - 1) / mid
 ```
 
-👉 Faster + no floating point
+👉 Avoids floating point operations
 
 ---
 
-## 🚀 Code (Copy-Paste Ready)
+## 💻 Code (Optimal)
 
 ```cpp
 class Solution {
@@ -96,9 +168,9 @@ public:
         long long sum = 0;
         
         for (auto num : nums) {
-            sum += (num + mid - 1) / mid; // integer ceil
+            sum += (num + mid - 1) / mid;
             
-            if (sum > threshold) return false; // early exit
+            if (sum > threshold) return false;
         }
         
         return true;
@@ -127,53 +199,32 @@ public:
 
 ---
 
-## 📊 Example
+## ⏱ Complexity Analysis
+
+### Time Complexity:
 
 ```
-nums = [1,2,5,9]
-threshold = 6
+O(n * log(max(nums)))
 ```
 
-Try divisor = 5:
+### Space Complexity:
 
 ```
-ceil(1/5)=1
-ceil(2/5)=1
-ceil(5/5)=1
-ceil(9/5)=2
-
-sum = 5 ≤ 6 ✅
+O(1)
 ```
-
-👉 Answer = 5
 
 ---
 
 ## 🧠 Key Takeaways
 
-* Binary Search on Answer works when:
-
-  * Condition is **monotonic**
-* Always try to **tighten search space**
-* Avoid floating point in interviews if possible
+* Binary Search works when condition is **monotonic**
+* Always **tighten search space**
+* Avoid floating point in interviews
 * Use **early exit** for optimization
 
 ---
 
-## ⏱ Complexity
+## 🏁 Final Thought
 
-* Time: `O(n * log(max(nums)))`
-* Space: `O(1)`
-
----
-
-## 🏁 Summary
-
-* Minimize divisor such that sum ≤ threshold
-* Use Binary Search
-* Optimize with integer ceil trick
-* Keep search space tight
-
----
-
-✨ Classic problem of **Binary Search on Answer + Optimization thinking**
+👉 This is a classic **Binary Search on Answer** problem
+👉 Focus on recognizing monotonic patterns — that's the real skill 🚀
