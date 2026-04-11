@@ -1,4 +1,4 @@
-# Climbing Stairs Problem
+# Climbing Stairs Problem (C++)
 
 ## 📌 Problem Statement
 
@@ -23,7 +23,7 @@ Ways → `(1+1+1), (1+2), (2+1)`
 
 ------------------------------------------------------------------------
 
-# 🚀 Approaches
+# 🚀 C++ Approaches
 
 ------------------------------------------------------------------------
 
@@ -31,14 +31,15 @@ Ways → `(1+1+1), (1+2), (2+1)`
 
 ### 💡 Idea
 
-At each step, you have 2 choices → take 1 step or 2 steps.
+At each step, you have 2 choices.
 
-Recurrence: Ways(n) = Ways(n-1) + Ways(n-2)
+### 🔁 Code
 
-### 🔁 Code (JavaScript)
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
 
-``` javascript
-function climbStairs(n) {
+int climbStairs(int n) {
     if (n <= 2) return n;
     return climbStairs(n - 1) + climbStairs(n - 2);
 }
@@ -49,28 +50,30 @@ function climbStairs(n) {
 -   Time: **O(2\^n)**
 -   Space: **O(n)**
 
-### ❌ Drawbacks
-
--   Recomputes same subproblems
--   Exponential time
-
 ------------------------------------------------------------------------
 
-## 2️⃣ Better Approach (Memoization / Top-Down DP)
+## 2️⃣ Memoization (Top-Down DP)
 
 ### 💡 Idea
 
-Store computed results to avoid recomputation.
+Store computed results.
 
-### 🔁 Code (JavaScript)
+### 🔁 Code
 
-``` javascript
-function climbStairs(n, dp = {}) {
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(int n, vector<int>& dp) {
     if (n <= 2) return n;
-    if (dp[n]) return dp[n];
+    if (dp[n] != -1) return dp[n];
 
-    dp[n] = climbStairs(n - 1, dp) + climbStairs(n - 2, dp);
-    return dp[n];
+    return dp[n] = solve(n - 1, dp) + solve(n - 2, dp);
+}
+
+int climbStairs(int n) {
+    vector<int> dp(n + 1, -1);
+    return solve(n, dp);
 }
 ```
 
@@ -79,30 +82,28 @@ function climbStairs(n, dp = {}) {
 -   Time: **O(n)**
 -   Space: **O(n)**
 
-### ✅ Advantages
-
--   Eliminates repeated calculations
--   Much faster
-
 ------------------------------------------------------------------------
 
-## 3️⃣ Optimal Approach (Bottom-Up DP / Tabulation)
+## 3️⃣ Tabulation (Bottom-Up DP)
 
 ### 💡 Idea
 
-Build answers iteratively.
+Iteratively build solution.
 
-### 🔁 Code (JavaScript)
+### 🔁 Code
 
-``` javascript
-function climbStairs(n) {
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int climbStairs(int n) {
     if (n <= 2) return n;
 
-    let dp = new Array(n + 1);
+    vector<int> dp(n + 1);
     dp[1] = 1;
     dp[2] = 2;
 
-    for (let i = 3; i <= n; i++) {
+    for (int i = 3; i <= n; i++) {
         dp[i] = dp[i - 1] + dp[i - 2];
     }
 
@@ -117,23 +118,26 @@ function climbStairs(n) {
 
 ------------------------------------------------------------------------
 
-## 4️⃣ Most Optimal (Space Optimized)
+## 4️⃣ Space Optimized
 
 ### 💡 Idea
 
-Only last two values are needed.
+Only last two values needed.
 
-### 🔁 Code (JavaScript)
+### 🔁 Code
 
-``` javascript
-function climbStairs(n) {
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int climbStairs(int n) {
     if (n <= 2) return n;
 
-    let prev2 = 1;
-    let prev1 = 2;
+    int prev2 = 1;
+    int prev1 = 2;
 
-    for (let i = 3; i <= n; i++) {
-        let curr = prev1 + prev2;
+    for (int i = 3; i <= n; i++) {
+        int curr = prev1 + prev2;
         prev2 = prev1;
         prev1 = curr;
     }
@@ -151,30 +155,22 @@ function climbStairs(n) {
 
 # 📊 Summary
 
-  ------------------------------------------------------------------------
-  Approach         Time         Space           Notes
-                   Complexity   Complexity      
-  ---------------- ------------ --------------- --------------------------
-  Brute Force      O(2\^n)      O(n)            Very slow
-
-  Memoization      O(n)         O(n)            Top-down DP
-
-  Tabulation       O(n)         O(n)            Bottom-up DP
-
-  Space Optimized  O(n)         O(1)            Best solution
-  ------------------------------------------------------------------------
+  Approach      Time Complexity   Space Complexity
+  ------------- ----------------- ------------------
+  Recursion     O(2\^n)           O(n)
+  Memoization   O(n)              O(n)
+  Tabulation    O(n)              O(n)
+  Optimized     O(n)              O(1)
 
 ------------------------------------------------------------------------
 
 # 🧠 Key Insight
 
-This problem is essentially **Fibonacci**: Ways(n) = Fib(n+1)
+👉 This problem is equivalent to **Fibonacci(n+1)**
 
 ------------------------------------------------------------------------
 
-# 🎯 When to Use What?
+# 🎯 Interview Tip
 
--   Use **Brute Force** → learning recursion\
--   Use **Memoization** → easier recursion optimization\
--   Use **Tabulation** → iterative DP\
--   Use **Space Optimization** → best for interviews
+Always explain progression: Recursion → Memoization → Tabulation → Space
+Optimization
